@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Xspera.Repositories.Products;
+using Xspera.Repositories.Reviews;
+using Xspera.Services.Products;
+using Xspera.Services.Reviews;
 
 namespace Xspera.Web
 {
@@ -31,6 +35,11 @@ namespace Xspera.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddSingleton(Configuration);            
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IReviewRepository, ReviewRepository>();
+            services.AddTransient<IReviewService, ReviewService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

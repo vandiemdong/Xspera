@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Products\" />
+    <ProjectReference Include="..\Xspera.Models\Xspera.Models.csproj" />
+    <ProjectReference Include="..\Xspera.Repositories\Xspera.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

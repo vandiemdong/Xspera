@@ -3,69 +3,15 @@
     var patch = snabbdom.patch,
         h = snabbdom.h;
 
-    
-    function controller() {
-        this.data = [
-            {
-                BrandName: 'Apple',
-                ProductID: 1,
-                ProductName: 'iPhone X',
-                Price: 100.00,
-                Description: 'XXX',
-                Image: 'https://images.fpt.shop/unsafe/fit-in/465x465/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2017/12/8/636483223586180190_3.jpg',
-                Reviews: [
-                    {
-                        Username: 'vandiemdong',
-                        Summary: 'ZZZZ'
-                    }, {
-                        Username: 'vandiemdong2',
-                        Summary: 'ZZZZ'
-                    }
-                ]
-            },
-            {
-                BrandName: 'Apple',
-                ProductID: 1,
-                ProductName: 'iPhone X',
-                Price: 100.00,
-                Description: 'XXX',
-                Image: 'https://images.fpt.shop/unsafe/fit-in/465x465/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2017/12/8/636483223586180190_3.jpg',
-                Reviews: [
-                    {
-                        Username: 'vandiemdong',
-                        Summary: 'ZZZZ'
-                    }, {
-                        Username: 'vandiemdong2',
-                        Summary: 'ZZZZ'
-                    }
 
-                ]
+    function controller() {       
 
-            },
-            {
-                BrandName: 'Apple',
-                ProductID: 1,
-                ProductName: 'iPhone X',
-                Price: 100.00,
-                Description: 'XXX',
-                Image: 'https://images.fpt.shop/unsafe/fit-in/465x465/filters:quality(90):fill(white)/cdn.fptshop.com.vn/Uploads/Originals/2017/12/8/636483223586180190_3.jpg',
-                Reviews: [
-                    {
-                        Username: 'vandiemdong',
-                        Summary: 'ZZZZ'
-                    }, {
-                        Username: 'vandiemdong2',
-                        Summary: 'ZZZZ'
-                    }
-
-                ]
-
-            }
-        ];
     }
 
+   
+
     controller.prototype.DefineLayout = function () {
-        var data = this.data;        
+        var data = this.data;
 
         return h('div.row', {}, this.RenderProduct(data));
     };
@@ -78,21 +24,43 @@
                     [
                         h('img', {
                             props: {
-                                src: data[i].Image,
+                                src: data[i].image
+                            },
+                            style: {
+                                width: '100%',
+                                height: '260px'
                             }
                         }),
-                        h('p','Hello')
+                        h('span', 'Hello'),  
+                        h('br', ''),
+                        h('span', '100USD')
                     ])
             );
+
             res.push(html);
         }
         return res;
     };
 
     controller.prototype.Render = function () {
-        this.vnode = document.getElementById('product-list');
-        this.vnode = patch(this.vnode, this.DefineLayout());
-    };    
+        var self = this;
+        $.ajax({
+            type: 'GET',
+            url: '/api/products/getall',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (data) {
+                self.vnode = document.getElementById('product-list');
+
+                self.data = data;
+
+                self.vnode = patch(self.vnode, self.DefineLayout());
+            }
+        });
+
+
+        
+    };
 
     return controller;
 
