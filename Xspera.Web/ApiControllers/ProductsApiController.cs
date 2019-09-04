@@ -41,14 +41,14 @@ namespace Xspera.Web.ApiControllers
         [HttpGet("{id?}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var products = await _productService.GetAllProducts(id);
+            var product = await _productService.GetById(id);
 
-            foreach (var item in products)
+            if(product !=null)
             {
-                item.Reviews = await _reviewService.GetByProductId(item.ID);
-            }
+                product.Reviews = await _reviewService.GetByProductId(product.ID);
+            } 
 
-            return Ok(new { isError = false, data = products });
+            return Ok(new { isError = false, data = product });
         }
     }
 }

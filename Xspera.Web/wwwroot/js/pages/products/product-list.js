@@ -44,7 +44,12 @@
                         h('h4.brand-name', data[i].brandName),                        
                         h('h5.product-name', data[i].name),                        
                         h('p.price', data[i].price + 'USD'),
-                        h('p', h('button', 'Review')),
+                        h('p', h('button', {
+                            on:
+                            {
+                                click: [this.ReviewClicked,data[i]]                                    
+                            }
+                        }, 'Review')),
                         //h('div.review', this.RenderComment(data[i].reviews))
                     ])
             );
@@ -68,6 +73,23 @@
             res.push(html);
         }
         return res;
+    };
+
+    controller.prototype.ReviewClicked = function (data) {
+        console.log(data);
+        $.ajax({
+            type: 'GET',
+            url: '/api/products/getbyid/' + data.id,
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                self.vnode = document.getElementById('product-list');
+
+                self.data = response.data;
+
+                self.vnode = patch(self.vnode, self.DefineLayout());
+            }
+        });
     };
 
     controller.prototype.Render = function () {
