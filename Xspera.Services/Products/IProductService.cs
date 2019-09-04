@@ -7,6 +7,8 @@ namespace Xspera.Services.Products
 {
     public interface IProductService
     {
-        Task<IEnumerable<Models.Products>> GetAllProducts();
+        Task<IEnumerable<Models.Products>> GetAllProducts(int brandId);
+
+        Task<Models.Products> GetById(int id);
     }
 }

@@ -12,9 +12,14 @@ namespace Xspera.Services.Products
         private readonly IProductRepository _repository;
 
         public ProductService(IProductRepository repository) => _repository = repository;
-        public async Task<IEnumerable<Models.Products>> GetAllProducts()
+        public async Task<IEnumerable<Models.Products>> GetAllProducts(int brandId)
         {
-            return await _repository.GetAll();
-        }      
+            return await _repository.GetAll(brandId);
+        }
+
+        public async Task<Models.Products> GetById(int id)
+        {
+            return await _repository.GetById(id);
+        }
     }
 }

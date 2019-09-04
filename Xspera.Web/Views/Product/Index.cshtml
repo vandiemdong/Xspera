@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .section-left, section-right {
+        padding: 12px 24px !important;
+    }
+    .product-name {
+        font-family: 'Playfair Display';
+        letter-spacing: 5px;
+    }
+</style>
+
+<div id="product-detail"></div>
+
+<hr />
+
+<environment include="Development">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="~/lib/eventemitter2.js"></script>
+    <script src="~/lib/snabbdom/snabbdom-browser.js"></script>
+    <script src="~/js/pages/products/product-detail.js"></script>
+</environment>
+
+<script>
+    (function () {
+        FrontendPageClient = new ProductDetail().Render();
+    })();
+</script>
+
+

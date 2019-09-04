@@ -11,9 +11,7 @@ using System.Threading.Tasks;
 using Xspera.Models;
 
 namespace Xspera.Repositories.Reviews
-{
-    
-
+{   
     public class ReviewRepository : IReviewRepository
     {
         #region Connect DB

@@ -23,46 +23,32 @@ namespace Xspera.Web.ApiControllers
             _reviewService = reviewService;
         }
 
-
-
         // GET: api/<controller>
-        [HttpGet]
-        public async Task<IEnumerable<Xspera.Models.Products>> GetAll()
+        [HttpGet("{brandId?}")]
+        public async Task<IActionResult> GetAll(int brandId)
         {
-            var products = await _productService.GetAllProducts();
+            var products = await _productService.GetAllProducts(brandId);
 
             foreach (var item in products)
             {
                 item.Reviews = await _reviewService.GetByProductId(item.ID);
             }
 
-
-            return products;
+            return Ok(new { isError = false, data = products });
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpGet("{id?}")]
+        public async Task<IActionResult> GetById(int id)
         {
-        }
+            var products = await _productService.GetAllProducts(id);
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+            foreach (var item in products)
+            {
+                item.Reviews = await _reviewService.GetByProductId(item.ID);
+            }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(new { isError = false, data = products });
         }
     }
 }
