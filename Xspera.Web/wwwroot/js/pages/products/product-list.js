@@ -76,20 +76,7 @@
     };
 
     controller.prototype.ReviewClicked = function (data) {
-        console.log(data);
-        $.ajax({
-            type: 'GET',
-            url: '/api/products/getbyid/' + data.id,
-            contentType: 'application/json;',
-            dataType: 'json',
-            success: function (response) {
-                self.vnode = document.getElementById('product-list');
-
-                self.data = response.data;
-
-                self.vnode = patch(self.vnode, self.DefineLayout());
-            }
-        });
+        location.href = '/Product/Index?id=' + data.id;        
     };
 
     controller.prototype.Render = function () {
