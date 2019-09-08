@@ -13,7 +13,12 @@ namespace Xspera.Services.Reviews
     {
         private readonly IReviewRepository _repository;
 
-        public ReviewService(IReviewRepository repository) => _repository = repository;       
+        public ReviewService(IReviewRepository repository) => _repository = repository;
+
+        public async Task<int> CreateReview(ReviewsCreate model)
+        {
+            return await _repository.Create(model);
+        }
 
         public async Task<IEnumerable<Models.Reviews>> GetByProductId(int productId)
         {

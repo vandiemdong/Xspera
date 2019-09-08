@@ -3,10 +3,7 @@
     var patch = snabbdom.patch,
         h = snabbdom.h;
 
-
-    function controller() {
-
-    }
+    function controller() { }
 
     controller.prototype.DefineLayout = function () {
         var data = this.data;
@@ -20,7 +17,7 @@
                         'text-align': 'center'
                     }
                 }, [
-                        h('h2', "We're sorry!"),                        
+                        h('h2', "We're sorry!"),
                         h('h3', "The product you have requested cannot be found."),
                     ])
             );
@@ -41,13 +38,13 @@
                                 height: '185px'
                             }
                         }),
-                        h('h4.brand-name', data[i].brandName),                        
-                        h('h5.product-name', data[i].name),                        
+                        h('h4.brand-name', data[i].brandName),
+                        h('h5.product-name', data[i].name),
                         h('p.price', data[i].price + 'USD'),
                         h('p', h('button', {
                             on:
                             {
-                                click: [this.ReviewClicked,data[i]]                                    
+                                click: [this.ReviewClicked, data[i]]
                             }
                         }, 'Review')),
                         //h('div.review', this.RenderComment(data[i].reviews))
@@ -63,11 +60,11 @@
         if (!data.length) return;
         var res = [];
         for (var i = 0; i < data.length; i++) {
-            var html = h('div',                
-                    [                      
-                        h('p', data[i].username),                       
-                        h('p', data[i].reviewSummary)
-                    ]
+            var html = h('div',
+                [
+                    h('p', data[i].username),
+                    h('p', data[i].reviewSummary)
+                ]
             );
 
             res.push(html);
@@ -76,12 +73,12 @@
     };
 
     controller.prototype.ReviewClicked = function (data) {
-        location.href = '/Product/Index?id=' + data.id;        
+        location.href = '/Product/Index?id=' + data.id;
     };
 
     controller.prototype.Render = function () {
         var self = this;
-        var param = self.GetUrlVars()["brandId"];
+        var param = this.GetUrlVars()["brandId"];
 
         $.ajax({
             type: 'GET',
@@ -90,9 +87,7 @@
             dataType: 'json',
             success: function (response) {
                 self.vnode = document.getElementById('product-list');
-
                 self.data = response.data;
-
                 self.vnode = patch(self.vnode, self.DefineLayout());
             }
         });

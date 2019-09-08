@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Xspera.Models;
+using Xspera.Services.Reviews;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,31 +12,24 @@ namespace Xspera.Web.ApiControllers
 {
     [Route("api/reviews/[action]")]
     public class ReviewsApiController : Controller
-    {
+    {       
+        private readonly IReviewService _reviewService;
 
-        // POST api/<controller>
-        public struct Review
+        public ReviewsApiController(IReviewService reviewService)
         {
-            public int UserId;
-            public int ProductId;
-            public int Rating;
-            public string Comment;
-        };
+            
+            _reviewService = reviewService;
+        }
+
         [HttpPost]
-        public void Post([FromBody]Review model)
+        public async Task<IActionResult> Create([FromBody]ReviewsCreate model)
         {
-        }
+            var reviewId = await _reviewService.CreateReview(model);
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+            return Ok(new {
+                resultId = reviewId,
+                desciption = reviewId > 0 ? "Successfully created." : "Could not create this reivew." });
         }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+       
     }
 }

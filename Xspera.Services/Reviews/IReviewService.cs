@@ -9,5 +9,7 @@ namespace Xspera.Services.Reviews
     public interface IReviewService
     {
         Task<IEnumerable<Models.Reviews>> GetByProductId(int productId);
+
+        Task<int> CreateReview(Models.ReviewsCreate model);
     }
 }

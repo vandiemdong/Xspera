@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Xspera.Models;
 
 namespace Xspera.Repositories.Reviews
-{   
+{
     public class ReviewRepository : IReviewRepository
     {
         #region Connect DB
@@ -27,7 +27,24 @@ namespace Xspera.Repositories.Reviews
             {
                 return new SqlConnection(_config.GetConnectionString("MyConnectionString"));
             }
-        }      
+        }
+
+        public async Task<int> Create(ReviewsCreate model)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "exec [dbo].[usp_Reviews_Create] @Username, @ProductId, @Comment, @Rating";
+                conn.Open();
+                var result = await conn.QueryAsync<int>(sQuery, new
+                {
+                    Username = model.Username,
+                    ProductId = model.ProductId,
+                    Comment = model.Comment,
+                    Rating = model.Rating
+                });
+                return result.FirstOrDefault();
+            }
+        }
 
         public async Task<IEnumerable<Models.Reviews>> GetByProductId(int productId)
         {
