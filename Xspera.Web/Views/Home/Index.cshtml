@@ -91,16 +91,16 @@
 
 <div id="product-list"></div>
 
-<environment include="Development">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="~/lib/eventemitter2.js"></script>
     <script src="~/lib/snabbdom/snabbdom-browser.js"></script>
     <script src="~/js/pages/products/product-list.js"></script>
-</environment>
+
 
 <script>
-    (function () {        
+    $(function () {  
         FrontendPageClient = new ProductList().Render();
-    })();
+    });
 </script>
 
