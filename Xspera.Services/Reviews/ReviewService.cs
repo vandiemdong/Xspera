@@ -6,9 +6,7 @@ using Xspera.Models;
 using Xspera.Repositories.Reviews;
 
 namespace Xspera.Services.Reviews
-{
-   
-
+{  
     public class ReviewService : IReviewService
     {
         private readonly IReviewRepository _repository;
@@ -23,6 +21,11 @@ namespace Xspera.Services.Reviews
         public async Task<IEnumerable<Models.Reviews>> GetByProductId(int productId)
         {
             return await _repository.GetByProductId(productId);
+        }
+
+        public async Task<IEnumerable<Models.Reviews>> GetAll()
+        {
+            return await _repository.GetAll();
         }
     }
 }

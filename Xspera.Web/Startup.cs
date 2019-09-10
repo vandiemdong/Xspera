@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xspera.Repositories.Products;
 using Xspera.Repositories.Reviews;
+using Xspera.Repositories.Users;
 using Xspera.Services.Products;
 using Xspera.Services.Reviews;
 
@@ -40,6 +41,8 @@ namespace Xspera.Web
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

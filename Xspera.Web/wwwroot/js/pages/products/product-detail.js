@@ -3,7 +3,7 @@
     var patch = snabbdom.patch,
         h = snabbdom.h;
 
-    function controller() {       
+    function controller() {
         this.data = [];
         this.productId = null;
         this.username = '';
@@ -57,7 +57,7 @@
                     h('div.form-row.col-md-12', h('div#error-message')),
                     h('div.form-row', [
                         h('div.form-group.col-md-12', [
-                            h('button.btn.btn-dark', {
+                            h('button#btnAdd.btn.btn-dark', {
                                 on:
                                 {
                                     click: [this.AddReview, this]
@@ -118,7 +118,7 @@
 
     controller.prototype.RenderRating = function (numberStar, hasEventClick, fillStarRating) {
         var result = [];
-       
+
         for (var i = 0; i < numberStar; i++) {
             var _class = 'far fa-star';
 
@@ -131,7 +131,7 @@
                 style: {
                     'cursor': 'pointer'
                 },
-                on: {}               
+                on: {}
             }, '');
 
             if (hasEventClick) {
@@ -157,9 +157,9 @@
         controller.vnode = patch(controller.vnode, html);
     };
 
-    controller.prototype.RatingClicked = function (controller, index) {       
-       
-        controller.rating = index;      
+    controller.prototype.RatingClicked = function (controller, index) {
+
+        controller.rating = index;
 
         controller.vnode = document.getElementById('rating');
         document.getElementById('rating').innerHTML = '';
@@ -167,7 +167,10 @@
         controller.vnode = patch(controller.vnode, html);
     };
 
-    controller.prototype.AddReview = function (controller) {
+    controller.prototype.AddReview = function (controller) {  
+
+        $("#btnAdd").attr("disabled", true);
+
         var messages = [];
 
         if (!controller.username) {
@@ -200,6 +203,20 @@
                 success: function (response) {
                     if (response.resultId) {
                         location.href = '/';
+                    }
+                },
+                error: function (data) {
+                    $("#btnAdd").attr("disabled", false);
+                    var messages = [];
+                    var arr = data.responseJSON.errorMessages.split(',');
+                    for (var i = 0; i < arr.length; i++) {
+                        messages.push(arr[i]);
+                    }
+
+                    if (messages.length) controller.RenderErrorMessages(messages);
+                    else {
+                        controller.vnode = document.getElementById('error-message');
+                        document.getElementById('error-message').innerHTML = '';
                     }
                 }
             });

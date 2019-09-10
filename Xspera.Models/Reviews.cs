@@ -6,6 +6,7 @@ namespace Xspera.Models
 {
     public class Reviews
     {
+        public int ProductID { get; set; }
         public string Username { get; set; }
 
         public string ReviewSummary { get; set; }
@@ -22,5 +23,7 @@ namespace Xspera.Models
         public int ProductId { get; set; }
 
         public int Rating { get; set; }
+
+        public int UserID { get; set; }
     }
 }

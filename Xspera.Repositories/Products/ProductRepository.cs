@@ -27,13 +27,19 @@ namespace Xspera.Repositories.Products
             }
         }
 
-        public async Task<IEnumerable<Models.Products>> GetAll(int brandId)
+        public async Task<IEnumerable<Models.Products>> GetAll(int brandId, int pageSize, int pageNumber)
         {
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "exec [dbo].[usp_Products_GetAll] @BrandId";
+                string sQuery = "exec [dbo].[usp_Products_GetAll] @BrandId, @PageSize, @PageNumber, @Output";
                 conn.Open();
-                var result = await conn.QueryAsync<Models.Products>(sQuery, new { BrandId = brandId });
+                var result = await conn.QueryAsync<Models.Products>(sQuery, new
+                {
+                    BrandId = brandId,
+                    PageSize = pageSize > 0 ? pageSize : 10,
+                    PageNumber = pageNumber,
+                    Output = 0
+                });
                 return result;
             }
         }

@@ -31,19 +31,31 @@ namespace Xspera.Repositories.Reviews
 
         public async Task<int> Create(ReviewsCreate model)
         {
-            using (IDbConnection conn = Connection)
+            using (var con = new SqlConnection(_config.GetConnectionString("MyConnectionString")))
             {
-                string sQuery = "exec [dbo].[usp_Reviews_Create] @Username, @ProductId, @Comment, @Rating";
-                conn.Open();
-                var result = await conn.QueryAsync<int>(sQuery, new
+                con.Open();
+                using (IDbTransaction transaction = con.BeginTransaction())
                 {
-                    Username = model.Username,
-                    ProductId = model.ProductId,
-                    Comment = model.Comment,
-                    Rating = model.Rating
-                });
-                return result.FirstOrDefault();
-            }
+                    try
+                    {
+                        string query = "exec [dbo].[usp_Reviews_Create] @UserID, @ProductId, @Comment, @Rating";
+                        var result = await con.QueryAsync<int>(query, new
+                        {
+                            UserID = model.UserID,
+                            ProductId = model.ProductId,
+                            Comment = model.Comment,
+                            Rating = model.Rating
+                        }, transaction);
+                        transaction.Commit();
+                        return result.FirstOrDefault();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();                       
+                        throw;
+                    }                    
+                }
+            };           
         }
 
         public async Task<IEnumerable<Models.Reviews>> GetByProductId(int productId)
@@ -53,6 +65,17 @@ namespace Xspera.Repositories.Reviews
                 string sQuery = "exec [dbo].[usp_Reviews_GetByProductId] @ProductId";
                 conn.Open();
                 var result = await conn.QueryAsync<Models.Reviews>(sQuery, new { ProductId = productId });
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<Models.Reviews>> GetAll()
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = "exec [dbo].[usp_Reviews_GetAll]";
+                conn.Open();
+                var result = await conn.QueryAsync<Models.Reviews>(sQuery);
                 return result;
             }
         }

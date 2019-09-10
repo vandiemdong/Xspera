@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Xspera.Models;
 using Xspera.Services.Products;
 using Xspera.Services.Reviews;
 
@@ -24,17 +25,35 @@ namespace Xspera.Web.ApiControllers
         }
 
         // GET: api/<controller>
-        [HttpGet("{brandId?}")]
-        public async Task<IActionResult> GetAll(int brandId)
+        [HttpGet("{brandId?}/{pageSize?}/{pageNumber?}")]
+        public async Task<IActionResult> GetAll(int brandId, int pageSize, int pageNumber)
         {
-            var products = await _productService.GetAllProducts(brandId);
+            var products = await _productService.GetAllProducts(brandId, pageSize, pageNumber);
 
-            foreach (var item in products)
+            if (products.Any())
             {
-                item.Reviews = await _reviewService.GetByProductId(item.ID);
+                var reviews = await _reviewService.GetAll();
+                var result = (from pro in products
+                              select new Products
+                              {
+                                  ID = pro.ID,
+                                  BrandID = pro.BrandID,
+                                  BrandName = pro.BrandName,
+                                  Image = pro.Image,
+                                  Name = pro.BrandName,
+                                  Description = pro.Description,
+                                  Price = pro.Price,
+                                  CreatedDate = pro.CreatedDate,
+                                  Reviews = (from rev in reviews
+                                             where rev.ProductID == pro.ID
+                                             select rev).ToList()
+                              }).AsEnumerable();
+
+                return Ok(new { isError = false, data = result });
             }
 
             return Ok(new { isError = false, data = products });
+
         }
 
 
@@ -43,10 +62,10 @@ namespace Xspera.Web.ApiControllers
         {
             var product = await _productService.GetById(id);
 
-            if(product !=null)
+            if (product != null)
             {
                 product.Reviews = await _reviewService.GetByProductId(product.ID);
-            } 
+            }
 
             return Ok(new { isError = false, data = product });
         }

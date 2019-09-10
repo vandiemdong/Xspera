@@ -12,5 +12,7 @@ namespace Xspera.Repositories.Reviews
         Task<IEnumerable<Xspera.Models.Reviews>> GetByProductId(int productId);
 
         Task<int> Create(Xspera.Models.ReviewsCreate model);
+
+        Task<IEnumerable<Xspera.Models.Reviews>> GetAll();
     }
 }
