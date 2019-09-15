@@ -1,0 +1,19 @@
+{
+  "name": "xspeara.unit-tests",
+  "version": "0.0.0",
+  "description": "Xspeara.UnitTests",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "mocha": "^6.2.0"
+  },
+  "scripts": {
+    "test": "find ./tests -name '*_test.js' | xargs mocha -R spec"
+  },
+  "dependencies": {
+    "chai": "^4.2.0"
+  }
+}
